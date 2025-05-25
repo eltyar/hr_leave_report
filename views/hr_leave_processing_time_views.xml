@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Processing Time Tree View -->
+    <record id="view_hr_leave_processing_time_tree" model="ir.ui.view">
+        <field name="name">hr.leave.processing.time.tree</field>
+        <field name="model">hr.leave.processing.time</field>
+        <field name="arch" type="xml">
+            <tree string="Leave Processing Times">
+                <field name="leave_id"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="submission_date"/>
+                <field name="manager_approval_date"/>
+                <field name="final_approval_date"/>
+                <field name="processing_time_days" widget="float_time"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Processing Time Form View -->
+    <record id="view_hr_leave_processing_time_form" model="ir.ui.view">
+        <field name="name">hr.leave.processing.time.form</field>
+        <field name="model">hr.leave.processing.time</field>
+        <field name="arch" type="xml">
+            <form string="Leave Processing Time">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="leave_id"/>
+                            <field name="employee_id"/>
+                            <field name="department_id"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="submission_date"/>
+                            <field name="manager_approval_date"/>
+                            <field name="final_approval_date"/>
+                            <field name="processing_time" widget="float_time"/>
+                            <field name="processing_time_days" widget="float_time"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Processing Time Search View -->
+    <record id="view_hr_leave_processing_time_search" model="ir.ui.view">
+        <field name="name">hr.leave.processing.time.search</field>
+        <field name="model">hr.leave.processing.time</field>
+        <field name="arch" type="xml">
+            <search string="Leave Processing Times">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <filter string="Pending Final Approval" name="pending" domain="[('state','=','validate1')]"/>
+                <filter string="Approved" name="approved" domain="[('state','=','validate')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="employee" context="{'group_by':'employee_id'}"/>
+                    <filter string="Department" name="department" context="{'group_by':'department_id'}"/>
+                    <filter string="Status" name="status" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Processing Time Action -->
+    <record id="action_hr_leave_processing_time" model="ir.actions.act_window">
+        <field name="name">Leave Processing Times</field>
+        <field name="res_model">hr.leave.processing.time</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_hr_leave_processing_time_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No leave processing time records found
+            </p>
+            <p>
+                This view displays the processing time for leave requests,
+                from submission to final approval.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Scheduled Action to Initialize Processing Time Records -->
+    <record id="ir_cron_init_leave_processing_time" model="ir.cron">
+        <field name="name">Leave Processing Time: Initialize from Existing Records</field>
+        <field name="model_id" ref="model_hr_holidays"/>
+        <field name="state">code</field>
+        <field name="code">model.init_leave_processing_time()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">1</field>
+        <field name="doall" eval="False"/>
+        <field name="active" eval="False"/>
+    </record>
+    
+    <!-- Add menu entry under Leaves > Reporting -->
+    <menuitem id="menu_hr_leave_processing_time" 
+              name="Leave Processing Times" 
+              action="action_hr_leave_processing_time" 
+              parent="hr_holidays.menu_hr_holidays_report" 
+              sequence="10"/>
+</odoo>

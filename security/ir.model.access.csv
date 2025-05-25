@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_leave_processing_time_user,hr.leave.processing.time.user,model_hr_leave_processing_time,hr_holidays.group_hr_holidays_user,1,1,1,0
+access_hr_leave_processing_time_manager,hr.leave.processing.time.manager,model_hr_leave_processing_time,hr_holidays.group_hr_holidays_manager,1,1,1,1
+access_leave_processing_time_report_user,leave.processing.time.report.user,model_leave_processing_time_report,hr_holidays.group_hr_holidays_user,1,0,0,0
+access_leave_processing_time_report_manager,leave.processing.time.report.manager,model_leave_processing_time_report,hr_holidays.group_hr_holidays_manager,1,0,0,0
